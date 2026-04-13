@@ -1,0 +1,37 @@
+{
+  "name": "management-craft",
+  "version": "0.0.1",
+  "description": "The Craftsman — Management Craft's cited-research advisor, installable as a Claude Code skill",
+  "bin": {
+    "management-craft": "./scripts/install.js"
+  },
+  "files": [
+    "skill/",
+    "scripts/",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndySparks/management-craft-skill.git"
+  },
+  "keywords": [
+    "claude-code",
+    "claude",
+    "skill",
+    "mcp",
+    "management",
+    "advisor",
+    "coaching",
+    "leadership"
+  ],
+  "author": "Andy Sparks <andy@managementcraft.co>",
+  "license": "MIT",
+  "homepage": "https://managementcraft.co",
+  "bugs": {
+    "url": "https://github.com/AndySparks/management-craft-skill/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
