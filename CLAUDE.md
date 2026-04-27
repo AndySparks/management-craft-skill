@@ -2,6 +2,8 @@
 
 This repo is the npm package for The Craftsman, Management Craft's management advisor delivered as a Claude Code skill. Users run `npx management-craft install` to install it.
 
+**Spine status:** partially spined as of 2026-04-27. See `8-DECISIONS/2026-04-27-spine-adoption.md` for what travelled and what's an explicit divergence from the OS reference. Spine vocabulary (the spine, spined, spine adoption, spine-native): `~/operating-system/8-DECISIONS/2026-04-27-spine-portability.md`. Read `1-ROADMAP.md` at session start for current punch list.
+
 ## Three-repo architecture
 
 - **`management-craft`** — Next.js website + Layer 2a publishable content (topic/framework/reference pages) + editorial pipeline. Source of truth for everything users read at managementcraft.co.
