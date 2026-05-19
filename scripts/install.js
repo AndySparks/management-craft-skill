@@ -7,9 +7,13 @@ import https from "node:https";
 import http from "node:http";
 import { fileURLToPath } from "node:url";
 
-const PACKAGE_VERSION = "0.1.0";
-const DEFAULT_API_URL = "https://managementcraft.co";
-const LICENSE_URL = "https://managementcraft.co/license";
+const PACKAGE_VERSION = "0.1.2";
+// Alpha lives on `next.managementcraft.co`; the `wiki-and-skill-launch`
+// program merges to production only at program-launch gate. Switch this
+// default to `https://managementcraft.co` (and bump to a major version)
+// at that gate.
+const DEFAULT_API_URL = "https://next.managementcraft.co";
+const LICENSE_URL = "https://next.managementcraft.co/license";
 
 export function parseArgs(argv) {
   if (argv.length === 0) return { command: null, token: null };
