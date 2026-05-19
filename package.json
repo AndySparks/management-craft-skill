@@ -31,7 +31,7 @@
     "leadership"
   ],
   "author": "Andy Sparks <andy@managementcraft.co>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": false,
   "homepage": "https://managementcraft.co",
   "bugs": {
