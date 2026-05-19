@@ -138,6 +138,8 @@ export async function runInstall(token) {
     return 1;
   }
 
+  // Clean the destination first so removed/renamed files from prior versions don't linger.
+  fs.rmSync(destSkillDir, { recursive: true, force: true });
   copyDirRecursive(sourceSkillDir, destSkillDir);
 
   console.log(
@@ -161,7 +163,7 @@ async function main() {
 }
 
 // Only run when invoked as CLI; allow imports for testing.
-const invokedAsCli = process.argv[1] && process.argv[1].endsWith("install.js");
+const invokedAsCli = process.argv[1] === fileURLToPath(import.meta.url);
 if (invokedAsCli) {
   main();
 }

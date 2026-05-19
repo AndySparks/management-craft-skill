@@ -8,9 +8,7 @@
   },
   "files": [
     "scripts/install.js",
-    "skill/SKILL.md",
-    "skill/voice/the-craftsman.md",
-    "skill/advisors/delegation.md",
+    "skill/",
     "README.md",
     "LICENSE"
   ],
