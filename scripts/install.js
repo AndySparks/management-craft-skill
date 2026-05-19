@@ -163,7 +163,26 @@ async function main() {
 }
 
 // Only run when invoked as CLI; allow imports for testing.
-const invokedAsCli = process.argv[1] === fileURLToPath(import.meta.url);
+// npx invokes via a `.bin/management-craft` symlink that points at this file.
+// Strict equality of argv[1] === fileURLToPath(import.meta.url) misses that
+// case (argv[1] is the symlink, not the resolved file). realpathSync resolves
+// the symlink to the same absolute path as import.meta.url, so the comparison
+// works for both direct (`node scripts/install.js`) and npx invocations.
+// Test runners (vitest etc.) have argv[1] pointing at the runner, not this
+// file, so this correctly skips main() during imports.
+const scriptPath = fileURLToPath(import.meta.url);
+let invokedAsCli = false;
+if (typeof process.argv[1] === "string") {
+  if (process.argv[1] === scriptPath) {
+    invokedAsCli = true;
+  } else {
+    try {
+      invokedAsCli = fs.realpathSync(process.argv[1]) === scriptPath;
+    } catch {
+      invokedAsCli = false;
+    }
+  }
+}
 if (invokedAsCli) {
   main();
 }

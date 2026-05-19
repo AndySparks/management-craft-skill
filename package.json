@@ -1,6 +1,6 @@
 {
   "name": "management-craft",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "The Craftsman — management advisor skill grounded in cited research.",
   "bin": {
