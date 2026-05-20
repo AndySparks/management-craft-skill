@@ -7,7 +7,7 @@ import https from "node:https";
 import http from "node:http";
 import { fileURLToPath } from "node:url";
 
-const PACKAGE_VERSION = "0.1.2";
+const PACKAGE_VERSION = "0.2.0";
 // Alpha lives on `next.managementcraft.co`; the `wiki-and-skill-launch`
 // program merges to production only at program-launch gate. Switch this
 // default to `https://managementcraft.co` (and bump to a major version)
@@ -16,13 +16,15 @@ const DEFAULT_API_URL = "https://next.managementcraft.co";
 const LICENSE_URL = "https://next.managementcraft.co/license";
 
 export function parseArgs(argv) {
-  if (argv.length === 0) return { command: null, token: null };
-  const command = argv[0];
-  const token = argv[1] || null;
-  return { command, token };
+  const token = argv[0] || null;
+  return { token };
 }
 
 export function resolveSkillDir() {
+  return path.join(os.homedir(), ".claude", "skills", "mgmtcraft");
+}
+
+export function resolveLegacySkillDir() {
   return path.join(os.homedir(), ".claude", "skills", "management-craft");
 }
 
@@ -93,7 +95,7 @@ function packageRoot() {
 function printUsage() {
   console.log("Management Craft Skill");
   console.log("");
-  console.log("Usage: npx management-craft install <TOKEN>");
+  console.log("Usage: npx @mgmtcraft/install <TOKEN>");
   console.log("");
   console.log(`Get access at ${LICENSE_URL}`);
 }
@@ -136,10 +138,17 @@ export async function runInstall(token) {
   // Copy bundled skill files.
   const sourceSkillDir = path.join(packageRoot(), "skill");
   const destSkillDir = resolveSkillDir();
+  const legacySkillDir = resolveLegacySkillDir();
 
   if (!fs.existsSync(sourceSkillDir)) {
     console.error(`Bundled skill files missing at ${sourceSkillDir}. This is a packaging bug; please report.`);
     return 1;
+  }
+
+  // Migrate from pre-0.2.0 install path (`management-craft` → `mgmtcraft`).
+  if (fs.existsSync(legacySkillDir)) {
+    fs.rmSync(legacySkillDir, { recursive: true, force: true });
+    console.log(`Removed legacy install at ${legacySkillDir}.`);
   }
 
   // Clean the destination first so removed/renamed files from prior versions don't linger.
@@ -153,11 +162,7 @@ export async function runInstall(token) {
 }
 
 async function main() {
-  const { command, token } = parseArgs(process.argv.slice(2));
-  if (command !== "install") {
-    printUsage();
-    process.exit(command ? 1 : 0);
-  }
+  const { token } = parseArgs(process.argv.slice(2));
   if (!token) {
     printUsage();
     process.exit(1);
@@ -167,7 +172,7 @@ async function main() {
 }
 
 // Only run when invoked as CLI; allow imports for testing.
-// npx invokes via a `.bin/management-craft` symlink that points at this file.
+// npx invokes via a `.bin/install` symlink that points at this file.
 // Strict equality of argv[1] === fileURLToPath(import.meta.url) misses that
 // case (argv[1] is the symlink, not the resolved file). realpathSync resolves
 // the symlink to the same absolute path as import.meta.url, so the comparison
